@@ -1,5 +1,3 @@
-ID_sine_0	code
-_sine_wave_8
 	retlw 0x80
 	retlw 0x83
 	retlw 0x86
@@ -256,4 +254,3 @@ _sine_wave_8
 	retlw 0x77
 	retlw 0x7a
 	retlw 0x7d
-
