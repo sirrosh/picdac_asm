@@ -4,11 +4,12 @@ radix dec
 ;__config 0x3f78
 __CONFIG   _CP_OFF & _CPD_OFF & _WDT_OFF & _PWRTE_ON & _INTRC_OSC_NOCLKOUT & _MCLRE_OFF & _LVP_OFF
 
-#define SINE_TABLE_ADDRESS_H	0x02
 #define SINE_TABLE_ADDRESS	0x0200
+#define SINE_TABLE_ADDRESS_H	0x02
 
 SINE_TABLE	CODE	SINE_TABLE_ADDRESS
-#include sine.inc
+SINE_8
+#include "sine.inc"
 
     CBLOCK 0x70 ; 0x70-0x7F -- 16 bytes of bank independent memory block
 i_cycle
@@ -30,7 +31,7 @@ INT_VECT    CODE    0x0004          ; interrupt vector
 
 TABLEREAD   CODE    0x0006          ; table read routine, should be at fixed address
 TBLRD
-    MOVWF   W_swap
+    MOVWF   W_swap                  ; pageselw SINE_8 also spoils W_reg
     MOVLW   SINE_TABLE_ADDRESS_H
     MOVWF   PCLATH
     MOVFW   W_swap
@@ -49,6 +50,7 @@ MAIN_LOOP
     CALL   TBLRD
     MOVWF  PORTB
     INCF   i_cycle
+    pageselw $
     GOTO   MAIN_LOOP
 
 
